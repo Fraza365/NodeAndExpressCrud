@@ -1,14 +1,15 @@
 const express = require('express');
 const App = express();
 const bodyparser = require('body-parser');
-const mysql = require('mysql');
+const {Client,Pool} = require('pg');
 const session = require('express-session')
 
 
-const db = mysql.createConnection({
+const db = new Client({
     host     : 'localhost',
-    user     : 'root',
-    password : '',
+    user     : 'postgres',
+    password : '123',
+    database : 'nodedb'
   });;
 
 db.connect((err)=>{
@@ -16,11 +17,10 @@ db.connect((err)=>{
         console.log(err);
     }
     else{
-        console.log("mysql is connected");
+        console.log("postgres database is connected");
         
     }
 })
-
 
 
 
@@ -44,14 +44,6 @@ App.listen(port,()=>{
 
 
 
-// App.get('/',(req,res)=>{
-//     const prams={
-//         name: req.query.name,
-//         age: req.query.age,
-//     }  
-//     res.render('index')
-// })
-
 App.get('/', function(req, res) {
     db.query("select * from posts",(err,data)=>{
         if(err)
@@ -59,7 +51,7 @@ App.get('/', function(req, res) {
             console.log(err);
         }
         else{
-            const postsList = data;
+            const postsList = data.rows;            
             res.render('pages/index', {postsList, title:"Home",
                                                   indexActive: "active"});
         }
@@ -80,7 +72,7 @@ App.get('/addpost', function(req, res) {
 App.post('/addpost',(req,res)=>{
     postName = req.body.postTitle
     postDesc = req.body.postDesc
-    db.query(`insert into posts values (null,'${postName}','${postDesc}')`,(err,data)=>{
+    db.query(`insert into public.posts(title,"desc") values ('${postName}','${postDesc}')`,(err,data)=>{
         if(err)
         {
             console.log(postName + "   " + postDesc);
