@@ -72,16 +72,30 @@ App.get('/addpost', function(req, res) {
 App.post('/addpost',(req,res)=>{
     postName = req.body.postTitle
     postDesc = req.body.postDesc
+    if(process.env.PORT != 3000){
     db.query(`insert into public.posts(title,"desc") values ('${postName}','${postDesc}')`,(err,data)=>{
-        if(err)
-        {
-            console.log(postName + "   " + postDesc);
-            console.log(err);
-        }
-        else{
-            res.redirect('/')
-        }
-    })    
+            if(err)
+            {
+                console.log(postName + "   " + postDesc);
+                console.log(err);
+            }
+            else{
+                res.redirect('/')
+            }
+        })    
+    }
+    else{
+        db.query(`insert into posts(title,"desc") values ('${postName}','${postTitle}')')`,(err,data)=>{
+            if(err)
+            {
+                console.log(postName + "   " + postDesc);
+                console.log(err);
+            }
+            else{
+                res.redirect('/')
+            }
+        }) 
+    }
 })
 
 
