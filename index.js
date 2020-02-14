@@ -5,12 +5,14 @@ const {Client,Pool} = require('pg');
 const session = require('express-session')
 
 
-const db = new Client({
-    host     : 'localhost',
-    user     : 'postgres',
-    password : '123',
-    database : 'nodedb'
-  });;
+
+    const db = new Client({
+        host     : 'localhost',
+        user     : 'postgres',
+        password : '123',
+        database : 'postgresql-parallel-65900'
+      });
+
 
 db.connect((err)=>{
     if(err){
@@ -45,10 +47,10 @@ App.listen(port,()=>{
 
 
 App.get('/', function(req, res) {
-    db.query("SELECT * FROM posts",(err,data)=>{
+    db.query("select * from posts",(err,data)=>{
         if(err)
         {
-            res.redirect('/addpost');
+            console.log(err);
         }
         else{
             const postsList = data.rows;            
@@ -62,50 +64,26 @@ App.get('/', function(req, res) {
 
 
 App.get('/addpost', function(req, res) {
-    db.query(`insert into posts(title,"desc") values ('post all','post all')')`,(err,data)=>{
+    const pageData ={
+        title:"About",
+        postActive: "active"
+    }
+    res.render('pages/addpost',pageData);
+})
+
+App.post('/addpost',(req,res)=>{
+    postName = req.body.postTitle
+    postDesc = req.body.postDesc
+    db.query(`insert into public.posts(title,desc) values ('${postName}','${postDesc}')`,(err,data)=>{
         if(err)
         {
             console.log(postName + "   " + postDesc);
             console.log(err);
         }
         else{
-            const pageData ={
-                title:"About",
-                postActive: "active"
-            }
-            res.render('pages/addpost',pageData);
+            res.redirect('/')
         }
-    })
-    
-})
-
-App.post('/addpost',(req,res)=>{
-    postName = req.body.postTitle
-    postDesc = req.body.postDesc
-    if(process.env.PORT != 3000){
-    db.query(`insert into public.posts(title,"desc") values ('${postName}','${postDesc}')`,(err,data)=>{
-            if(err)
-            {
-                console.log(postName + "   " + postDesc);
-                console.log(err);
-            }
-            else{
-                res.redirect('/')
-            }
-        })    
-    }
-    else{
-        db.query(`insert into posts(title,"desc") values ('${postName}','${postTitle}')')`,(err,data)=>{
-            if(err)
-            {
-                console.log(postName + "   " + postDesc);
-                console.log(err);
-            }
-            else{
-                res.redirect('/')
-            }
-        }) 
-    }
+    })    
 })
 
 
