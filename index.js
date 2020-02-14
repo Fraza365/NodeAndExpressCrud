@@ -74,7 +74,7 @@ App.get('/addpost', function(req, res) {
 App.post('/addpost',(req,res)=>{
     postName = req.body.postTitle
     postDesc = req.body.postDesc
-    db.query(`insert into public.posts(title,desc) values ('${postName}','${postDesc}')`,(err,data)=>{
+    db.query(`insert into public.posts(title,"desc") values ('${postName}','${postDesc}')`,(err,data)=>{
         if(err)
         {
             console.log(postName + "   " + postDesc);
