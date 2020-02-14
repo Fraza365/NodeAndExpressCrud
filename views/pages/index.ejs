@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+
+    <div class="jumbotron">
+        <h3>You can see all posts here..</h3>
+        <ul class="list-group">
+            <% postsList.forEach(data=>{ %> 
+                <li class="list-group-item">
+                   <div class="card">
+                       <div class="card-header font-weight-bold"><%= data.title %></div>
+                       <div class="card-body"><%= data.desc %> <br>
+                        <a href="/postDelete/<%= data.id %> "> <button class="btn btn-danger btn-sm mt-3">Delete</button> </a>
+                    </div>
+                    </div>  
+                </li>
+            <% }); %> 
+          </ul>
+    </div>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
