@@ -62,7 +62,7 @@ App.get('/', function(req, res) {
 
 
 App.get('/addpost', function(req, res) {
-    db.query(`insert into posts(title,"desc") values ('${postName}','${postTitle}')')`,(err,data)=>{
+    db.query(`insert into posts(title,"desc") values ('post all','post all')')`,(err,data)=>{
         if(err)
         {
             console.log(postName + "   " + postDesc);
