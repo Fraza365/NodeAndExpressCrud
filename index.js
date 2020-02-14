@@ -9,7 +9,6 @@ const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : '',
-    database : 'nodedb'
   });;
 
 db.connect((err)=>{
