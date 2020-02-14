@@ -48,7 +48,7 @@ App.get('/', function(req, res) {
     db.query("select * from posts",(err,data)=>{
         if(err)
         {
-            console.log(err);
+            res.status(404).send(err);
         }
         else{
             const postsList = data.rows;            
