@@ -45,10 +45,10 @@ App.listen(port,()=>{
 
 
 App.get('/', function(req, res) {
-    db.query("select * from posts",(err,data)=>{
+    db.query("SELECT * FROM posts",(err,data)=>{
         if(err)
         {
-            res.status(404).send(err);
+            res.redirect('/addpost');
         }
         else{
             const postsList = data.rows;            
