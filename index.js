@@ -68,12 +68,15 @@ App.get('/addpost', function(req, res) {
             console.log(postName + "   " + postDesc);
             console.log(err);
         }
+        else{
+            const pageData ={
+                title:"About",
+                postActive: "active"
+            }
+            res.render('pages/addpost',pageData);
+        }
     })
-    const pageData ={
-        title:"About",
-        postActive: "active"
-    }
-    res.render('pages/addpost',pageData);
+    
 })
 
 App.post('/addpost',(req,res)=>{
