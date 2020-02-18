@@ -53,7 +53,10 @@ App.get('/', function(req, res) {
 })
 
 App.post('/',(req,res)=>{
-    db.query("select * from posts",(err,data)=>{
+
+        const q = `select * from posts where id NOT IN (${req.body.editid})`;
+    
+    db.query(q,(err,data)=>{
         if(err)
         {
             console.log(err);
@@ -96,6 +99,7 @@ App.get('/addpost', function(req, res) {
 App.post('/addpost',(req,res)=>{
     const postName = req.body.postTitle;
     const postDesc = req.body.postDesc;
+    
     const query= {text:`insert into posts(title,"desc") values($1 ,$2 )`,
                   values: [postName,postDesc] 
                  }
@@ -131,5 +135,22 @@ App.get("/postDelete/:id",(req,res)=>{
     else{
         res.send("please enter the id of post you want to delete")
     }
+    
+})
+
+App.post('/updatepost',(req,res)=>{
+    const postTitle= req.body.posttitle;
+    const postDesc= req.body.postdesc;
+    const id = req.body.editid;
+    const query= {text:`update posts set title = $1, "desc" = $2 where id = $3`,
+                  values: [postTitle,postDesc,id] 
+                 }
+    db.query(query,(err,data)=>{
+        if(err) console.log(err);
+        
+        else{
+            res.redirect('/');
+        }
+    })
     
 })
